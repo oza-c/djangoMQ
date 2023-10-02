@@ -1,0 +1,123 @@
+{% extends 'topics/base.html' %} {% block settings %}
+
+  <header class="bg-white shadow">
+    <div
+      class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center"
+    >
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Einstellungen</h1>
+    </div>
+  </header>
+  <main>
+    <form method="post" action="{% url 'topics:settings_change' %}">
+      {% csrf_token %}
+    <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div class="pb-12">
+          <h2 class="text-base font-semibold leading-7 text-gray-900">
+            MQTT Server
+          </h2>
+          <p class="mt-1 text-sm leading-6 text-gray-600">
+            Hinterlege hier deine MQTT Broker Verbindungseigenschaften
+          </p>
+          <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="col-span-full">
+              <label
+                for="broker_name"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Server Name</label
+              >
+              <div class="mt-2">
+                <input
+                  type="text"
+                  name="broker_name"
+                  id="broker_name"
+                  value="{{form.instance.broker_name}}"
+                  autocomplete="given-name"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div class="col-span-5">
+              <label
+                for="broker_ip"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Server Adresse</label
+              >
+              <div class="mt-2">
+                <input
+                  type="text"
+                  name="broker_ip"
+                  id="broker_ip"
+                  value="{{form.instance.broker_ip}}"
+                  autocomplete="given-name"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="col-span-1">
+              <label
+                for="broker_port"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Port</label
+              >
+              <div class="mt-2">
+                <input
+                  type="number"
+                  name="broker_port"
+                  id="broker_port"
+                  value="{{form.instance.broker_port}}"
+                  autocomplete="given-name"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label
+                for="broker_username"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Username</label
+              >
+              <div class="mt-2">
+                <input
+                  type="text"
+                  name="broker_username"
+                  id="broker_username"
+                  autocomplete="given-name"
+                  value="{{form.instance.broker_username}}"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label
+                for="broker_password"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Password</label
+              >
+              <div class="mt-2">
+                <input
+                  type="password"                 
+                  name="broker_password"
+                  id="broker_password"
+                  value="{{form.instance.broker_password}}"
+                  autocomplete="family-name"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 flex items-center justify-end gap-x-6">
+            <button
+              type="submit"
+              class="rounded-md bg-[#448834] px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#5a7e87] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+            >
+              Änderungen speichern
+            </button>
+          </div>
+        </form>
+    </div>
+  </main>
+{% endblock settings%}

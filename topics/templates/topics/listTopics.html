@@ -1,0 +1,144 @@
+{% block listTopics %} {{ chart_data|json_script:'chart_data' }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  var socket = new WebSocket("ws://localhost:8000/ws/data/");
+
+  socket.onmessage = function (event) {
+    var data = JSON.parse(event.data);
+    var newChart = Chart.getChart("chart-" + data.data.topic_name);
+    newChart.data.labels.push(
+      new Date(data.data.timestamp).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })
+    );
+    newChart.data.datasets[0].data.push(data.data.payload);
+    newChart.update();
+  };
+</script>
+
+<div class="grid grid-cols-3 gap-2">
+  {% for eintrag in topics %}
+  <div class="relative bg-neutral-100">
+    <div class="p-2 mb-9">
+      <canvas id="chart-{{eintrag.topic_name}}"></canvas>
+    </div>
+    <div class="absolute left-3 bottom-3">
+      {{ eintrag.topic_name }}
+      <span class="italic">{{eintrag.topic_unit.unit_char}}</span>
+    </div>
+    <div class="absolute right-3 bottom-1 flex flex-row items-center">
+      <a
+        href="{% url 'topics:detail' eintrag.topic_name %}"
+        class="hover:text-neutral-500 transition-opacity focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+            <path
+              d="M21 12c-2.4 4-5.4 6-9 6c-3.6 0-6.6-2-9-6c2.4-4 5.4-6 9-6c3.6 0 6.6 2 9 6"
+            />
+          </g>
+        </svg>
+        <span class="sr-only">Icon description</span>
+      </a>
+      <form action="{% url 'topics:loeschen' eintrag.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="hover:text-neutral-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"
+            />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+  <script>
+    new Chart(document.getElementById("chart-" + "{{eintrag.topic_name}}"), {
+      type: "line",
+      data: {
+        labels: JSON.parse(document.getElementById("chart_data").textContent)[
+          "{{eintrag.topic_name}}"
+        ].labels.map(function (datum) {
+          var dateObj = new Date(datum);
+          return dateObj.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+        }),
+        datasets: [
+          {
+            label: "{{eintrag.topic_unit.unit_char}}",
+            data: JSON.parse(document.getElementById("chart_data").textContent)[
+              "{{eintrag.topic_name}}"
+            ].data,
+            backgroundColor: function (context) {
+              const chart = context.chart;
+              const { ctx, chartArea } = chart;
+
+              gradient = ctx.createLinearGradient(0, 0, 0, 450);
+
+              gradient.addColorStop(0, "rgba(68, 136, 52, 0.85)");
+              gradient.addColorStop(0.75, "rgba(68, 136, 52, 0.5)");
+              gradient.addColorStop(0.5, "rgba(68, 136, 52, 0.05)");
+              gradient.addColorStop(1, "rgba(68, 136, 52, 0)");
+
+              return gradient;
+            },
+            borderWidth: 1,
+            pointBackgroundColor: "white",
+            fill: true,
+            borderColor: "#448834",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: true,
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  </script>
+  {% endfor %}
+</div>
+{% endblock listTopics%}

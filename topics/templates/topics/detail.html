@@ -1,0 +1,120 @@
+{% extends 'topics/base.html' %} {% block detailTopic %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ chart_data|json_script:'chart_data' }}
+<header class="bg-white shadow">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center">
+    <a
+      type="button"
+      href="{% url 'topics:index' %}"
+      class="relative rounded-full p-1 text-gray-400 hover:text-black"
+    >
+      <span class="absolute -inset-1.5"></span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 12h14M5 12l4 4m-4-4l4-4"
+        />
+      </svg>
+    </a>
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+      {{topic.topic_name}}
+    </h1>
+  </div>
+</header>
+<main class="mx-auto max-w-7xl py-7 sm:px-6 lg:px-8">
+  <div class="w-full relative pb-5">
+    <canvas id="chart"></canvas>
+  </div>
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-neutral-200">
+        <tr>
+          <th scope="col" class="px-6 py-3">ID</th>
+          <th scope="col" class="px-6 py-3">Value</th>
+          <th scope="col" class="px-6 py-3">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for eintrag in topic_data %}
+        <tr class="bg-neutral-100 border-b">
+          <th
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-500 whitespace-nowrap"
+          >
+            {{ forloop.counter }}
+          </th>
+          <th class="px-6 py-4 text-gray-500">{{eintrag.mqtt_payload}}</th>
+          <th class="px-6 py-4 text-gray-500">{{eintrag.mqtt_timestamp}}</th>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <script>
+    new Chart(document.getElementById("chart"), {
+      type: "line",
+      data: {
+        labels: (
+          JSON.parse(document.getElementById("chart_data")?.textContent)?.[
+            "{{topic.topic_name}}"
+          ]?.labels || []
+        ).map(function (datum) {
+          var dateObj = new Date(datum);
+          return dateObj.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+        }),
+        datasets: [
+          {
+            label: "{{topic.topic_unit.unit_char}}",
+            data:
+              JSON.parse(document.getElementById("chart_data").textContent)?.[
+                "{{topic.topic_name}}"
+              ]?.data || [],
+            backgroundColor: function (context) {
+              const chart = context.chart;
+              const { ctx, chartArea } = chart;
+
+              gradient = ctx.createLinearGradient(0, 0, 0, 450);
+
+              gradient.addColorStop(0, "rgba(68, 136, 52, 0.85)");
+              gradient.addColorStop(0.5, "rgba(68, 136, 52, 0.60)");
+              gradient.addColorStop(1, "rgba(68, 136, 52, 0.1)");
+
+              return gradient;
+            },
+            borderWidth: 1,
+            pointBackgroundColor: "white",
+            fill: true,
+            borderColor: "#448834",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  </script>
+</main>
+{% endblock detailTopic%}

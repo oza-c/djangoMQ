@@ -1,0 +1,72 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | djangoMQ</title>
+    {% tailwind_css %}
+  </head>
+  <body class="h-full">
+    <div class="min-h-full">
+      <nav class="bg-neutral-700">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 text-white font-bold">
+                <h1 class="text-xl font-bold flex items-center">
+                <img class="w-40" src="{% static 'images/logo.png' %}">
+                </h1>
+              </div>
+              <div class="hidden md:block">
+                {% with request.resolver_match.url_name as url_name %}
+                <div class="ml-10 flex items-baseline space-x-4">
+                  <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                  <a
+                  href="{% url 'topics:index' %}"
+                    class=" text-white hover:bg-neutral-500 rounded-md px-3 py-2 text-sm font-medium {% if url_name == 'index' %} active{% endif %}"
+                    >Dashboard</a
+                  >
+                  <a
+                  href="{% url 'topics:settings' %}"
+                    class="text-white hover:bg-neutral-500 hover:text-white rounded-md px-3 py-2 text-sm font-medium {% if url_name == 'settings' %} active{% endif %}"
+                    >Einstellungen</a
+                  >
+                </div>
+                {% endwith %}
+              </div>
+            </div>
+            <div class="hidden md:block">
+              <div class="ml-4 flex items-center md:ml-6">
+                <a
+                  type="button"
+                  href="{% url 'web:logout' %}"
+                  class="relative rounded-full  p-1 text-gray-400 hover:text-white "
+                >
+                  <span class="absolute -inset-1.5"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"><path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"/><path d="M9 12h12l-3-3m0 6l3-3"/></g></svg>
+                </a>
+          </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="md:hidden" id="mobile-menu">
+          
+        </div>
+      </nav>
+      {%block dashboard %}
+      {%endblock%}
+      {%block detailTopic %}
+      {%endblock%}
+      {%block settings %}
+      {%endblock%}
+    </div>
+  </body>
+  <style>
+    .active {
+      background-color: rgb(82 82 82);
+    }
+  </style>
+</html>

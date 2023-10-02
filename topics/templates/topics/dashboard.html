@@ -1,0 +1,16 @@
+{% extends 'topics/base.html' %} {% block dashboard %}
+<header class="bg-white shadow">
+  <div
+    class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center"
+  >
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+    {%block addTopicForm %} {% include 'topics/addTopicForm.html' %}
+    {%endblock%}
+  </div>
+</header>
+<main>
+  <div class="mx-auto max-w-7xl py-7 sm:px-6 lg:px-8">
+    {%block listTopics %} {% include 'topics/listTopics.html' %} {%endblock%}
+  </div>
+</main>
+{% endblock dashboard%}

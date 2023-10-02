@@ -1,0 +1,38 @@
+{% block addTopicForm %}
+<form
+  method="post"
+  class="flex flex-row"
+  action="{% url 'topics:topic_hinzufuegen' %}"
+>
+  {% csrf_token %}
+  <div class="flex flex-row items-center gap-2">
+    <div class="relative rounded-md shadow-sm flex flex-row">
+      <input
+        type="text"
+        name="topic_name"
+        id="topic_name"
+        class="block w-full rounded-md border-0 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm sm:leading-6"
+        placeholder="Topic..."
+      />
+      <div class="absolute inset-y-0 right-0 flex items-center">
+        <label for="topic_unit" class="sr-only">Unit</label>
+        <select
+          id="topic_unit"
+          name="topic_unit"
+          class="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-[#448834] sm:text-sm"
+        >
+          {% for eintrag in units %}
+          <option>{{eintrag.unit_name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="text-white bg-[#448834] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 focus:outline-none"
+    >
+      Topic hinzufügen
+    </button>
+  </div>
+</form>
+{% endblock addTopicForm%}

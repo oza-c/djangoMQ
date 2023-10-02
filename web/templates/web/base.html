@@ -1,0 +1,15 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>djangoMQ - Startup</title>
+    {% tailwind_css %}
+  </head>
+  <body class="flex flex-col h-screen">
+    {% if request.user.is_authenticated%}
+    <h2>Redirect...</h2>
+    {% else %} {% endif %} {% block AuthForm %} {% endblock%}
+  </body>
+</html>
