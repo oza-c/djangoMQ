@@ -20,6 +20,7 @@
 - [x] Visualisierung von Statusdaten.
   - [x] ChartJS
   - [x] Echtzeit Aktualisierung der Graphen
+  - [x] Redis für django Channels
 - [x] Speichern von Statusdaten
 
 ### Verwendete Sprachen, Frameworks und Bibliotheken
