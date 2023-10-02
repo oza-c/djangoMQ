@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/oza-c/djangoMQ/blob/main/project/static/images/logo.png?raw=true#gh-light-mode-only">
+<img src="https://github.com/oza-c/djangoMQ/blob/main/project/static/images/logo_dark.png?raw=true#gh-light-mode-only">
 <img src="https://github.com/oza-c/djangoMQ/blob/main/project/static/images/logo.png?raw=true#gh-dark-mode-only">
 </p>
 
